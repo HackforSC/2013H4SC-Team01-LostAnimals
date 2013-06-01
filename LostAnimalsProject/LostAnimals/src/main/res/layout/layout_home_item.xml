@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+        >
+
+
+    <ImageView
+        android:id="@+id/pet_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+
+        android:src="@drawable/ic_action_person_light"
+        />
+
+
+    <ImageView
+        android:id="@+id/banner_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+
+        android:background="@drawable/ic_action_person_light"
+        />
+
+    <RelativeLayout
+        android:id="@+id/action_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignBottom="@+id/banner_image"
+
+        android:background="@color/white30"
+        >
+
+        <TextView
+            android:id="description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+
+            android:textSize="20sp"
+            android:text="Mix Lab | Tan/White"
+
+            />
+
+        <Button
+            android:id="@+id/btn_more_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            />
+
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>
