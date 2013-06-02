@@ -1,0 +1,122 @@
+<legend>Report Pet</legend>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+
+<div class="note well">
+        Required fields are marked by *. Most fields are optional, but please provide the most accurate information you can.
+</div>
+
+<div class="row-fluid">
+  <div class="span5">
+    <%= form_for @pet, :html => {:id => "report_pet", :class => 'form-horizontal'}, :multipart => true do |f| %>
+      <% if @pet.errors.any? %>
+        <div class="alert">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+          <ul class="unstyled" style="margin-bottom:0px;">
+          <% @pet.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="control-group">
+        <span class="control-label">
+          Report Type *
+        </span>
+        <div class="controls">
+          <label class="radio"><input type="radio" name="pet[status]" value="Lost" /> I lost my pet</label>
+          <label class="radio"><input type="radio" name="pet[status]" value="Found" /> I found a pet</label>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :animal_type, :class => 'control-label' %>
+        <div class="controls"><%= f.select :animal_type, ['Dog', 'Cat', 'Other'] %></div>
+      </div>
+      <div class="control-group">
+        <%= f.label :picture, :class => 'control-label' %>
+        <div class="controls"><%= f.file_field :picture %></div>
+      </div>
+      <div class="control-group">
+        <%= f.hidden_field :last_seen_location_lat %>
+        <%= f.hidden_field :last_seen_location_long %>
+        <%= f.label "Last Seen Location", :class => 'control-label' %>
+        <div class="controls">
+          <input type="text" id="last_seen_location" />
+          <p class="text-info" id="result_location"></p>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label :sex, :class => 'control-label' %>
+        <div class="controls"><%= f.select :sex, ['Unknown', 'Male', 'Female'] %></div>
+      </div>
+      <div class="control-group">
+        <%= f.label :breed, :class => 'control-label' %>
+        <div class="controls"><%= f.text_field :breed %></div>
+      </div>
+      <div class="control-group">
+        <%= f.label :color, "Color *", :class => 'control-label' %>
+        <div class="controls"><%= f.text_field :color %></div>
+      </div>
+      <div class="control-group">
+        <%= f.label :size, "Size *", :class => 'control-label' %>
+        <div class="controls"><%= f.text_field :size %></div>
+      </div>
+      <div class="control-group">
+        <%= f.label :name, :class => 'control-label' %>
+        <div class="controls"><%= f.text_field :name %></div>
+      </div>
+      <div class="control-group">
+        <%= f.label :description, "Description *", :class => 'control-label' %>
+        <div class="controls"><%= f.text_area :description, :id => "description" %></div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <%= f.submit "Submit Report" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div id="map-canvas"></div>
+
+<script type="text/javascript">
+  var map, geocoder, marker;
+
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+  var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
+
+  $("#last_seen_location").on('keyup', function(ev) {
+    delay(function(){
+      var address = $("#last_seen_location").val();
+      $("#result_location").text("Pending...");
+
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        console.log(results);
+        if (status == google.maps.GeocoderStatus.OK) {
+          $("#result_location").text(results[0].formatted_address);
+
+          $("#pet_last_seen_location_lat").val(results[0].geometry.location.lat());
+          $("#pet_last_seen_location_long").val(results[0].geometry.location.lng());
+        } else {
+          $("#result_location").text("Pending...");
+          console.log('Geocode was not successful for the following reason: ' + status);
+        }
+      });
+    }, 500);
+  });
+</script>

@@ -1,0 +1,11 @@
+development:
+  access_key: AKIAI6QJH2VDRWNPNQXA
+  secret: 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
+
+test:
+  access_key: AKIAI6QJH2VDRWNPNQXA
+  secret: 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
+
+production:
+  access_key: AKIAI6QJH2VDRWNPNQXA
+  secret: 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

@@ -1,0 +1,33 @@
+<legend>Register</legend>
+
+<%= form_for @user, :url => :register_create, :html => {:class => "form-horizontal"} do |f| %>
+  <% if @user.errors.any? %>
+    <div class="alert">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+      <ul class="unstyled" style="margin-bottom:0px;">
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="control-group">
+    <%= f.label :email, :class => 'control-label'%>
+    <div class="controls"><%= f.email_field :email %></div>
+  </div>
+  <div class="control-group">
+    <%= f.label :password, :class => 'control-label'%>
+    <div class="controls"><%= f.password_field :password %></div>
+  </div>
+  <div class="control-group">
+    <%= f.label :password_confirmation, :class => 'control-label' %>
+    <div class="controls"><%= f.password_field :password_confirmation %></div>
+  </div>
+  <div class="actions">
+  	<div class="controls">
+    	<%= f.submit "Register" %>
+	</div>
+  </div>
+<% end %>

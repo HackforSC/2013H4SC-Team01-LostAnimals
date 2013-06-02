@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lost Animals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div class="container">
+  <div class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="/">Lost Animals</a>
+      <ul class="nav">
+        <li><a href="/pets">Local Pets</a></li>
+        <li><%= link_to "Report Pet", :report %></li>
+       <!-- <li><a href="/success">Success Stories</a></li>-->
+      </ul>
+      <ul class="pull-right nav">
+        <% if current_user %>
+          <li>
+            <%= link_to current_user.email, "" %>
+          </li>
+          <li>
+            <%= link_to "Logout", :logout%>
+          </li>
+        <% else %>
+          <li>
+            <%= link_to "Login", :login%>
+          </li>
+          <li>
+            <%= link_to "Register", :register%>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span12">
+      <% [:notice, :error, :alert].each do |level| %>
+        <% unless flash[level].blank? %>
+          <div class="alert <%= flash_class(level) %>">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= flash[level] %>
+          </div>
+        <% end %>
+      <% end %>
+      <%= yield %>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

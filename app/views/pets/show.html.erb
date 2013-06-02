@@ -1,0 +1,59 @@
+<div class="row-fluid">
+  <div class="span6 offset3" id="pet-details">
+    <div style="margin-bottom:10px;">
+      <img src="<%= @pet.picture.presence || 'http://placehold.it/438x327' %>" />
+    </div>
+    <div class="row-fluid">
+      <div class="span6">
+        <p>
+          <b>Name:</b>
+          <span><%= @pet.name.presence || "Unknown" %></span>
+        </p>
+      </div>
+      <div class="span6">
+        <p>
+          <b>Status:</b>
+          <span class="text-<%= (@pet.status == "Resolved" ? "success" : "warning")%>"><b><%= @pet.status %></b></span>
+        </p>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span6">
+        <p>
+          <b>Breed:</b>
+          <%= @pet.breed.presence || "Unknown" %>
+        </p>
+      </div>
+      <div class="span6">
+        <p>
+          <b>Color:</b>
+          <%= @pet.color.presence || "Unknown" %>
+        </p>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span6">
+        <p>
+          <b>Sex:</b>
+          <%= @pet.sex.presence || "Unknown" %>
+        </p>
+      </div>
+      <div class="span6">
+        <p>
+          <b>Size:</b>
+          <%= @pet.size.presence || "Unknown" %>
+        </p>
+      </div>
+    </div>
+    <% if @pet.description.present? %>
+    <div class="row-fluid" id="description">
+      <div class="span12">
+        <p>
+          <b>Description:</b>
+        </p>
+        <p><%= @pet.description %></p>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

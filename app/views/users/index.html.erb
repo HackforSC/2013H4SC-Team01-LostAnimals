@@ -1,0 +1,35 @@
+<h1>Listing users</h1>
+
+<table>
+  <tr>
+    <th>Facebook</th>
+    <th>Email</th>
+    <th>Password</th>
+    <th>Perm location lat</th>
+    <th>Perm location long</th>
+    <th>Last location lat</th>
+    <th>Last location long</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @users.each do |user| %>
+  <tr>
+    <td><%= user.facebook_id %></td>
+    <td><%= user.email %></td>
+    <td><%= user.password %></td>
+    <td><%= user.perm_location_lat %></td>
+    <td><%= user.perm_location_long %></td>
+    <td><%= user.last_location_lat %></td>
+    <td><%= user.last_location_long %></td>
+    <td><%= link_to 'Show', user %></td>
+    <td><%= link_to 'Edit', edit_user_path(user) %></td>
+    <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New User', new_user_path %>

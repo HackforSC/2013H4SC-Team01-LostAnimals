@@ -1,0 +1,19 @@
+common: &common
+  adapter: postgresql
+  host: localhost
+  username: bryan
+  password:
+
+development:
+  <<: *common
+  database: lostanimals_dev
+
+test:
+  <<: *common
+  database: lostanimals_dev
+
+production:
+  adapter: sqlite3
+  database: db/production.sqlite3
+  pool: 5
+  timeout: 5000

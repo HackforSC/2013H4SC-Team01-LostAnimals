@@ -1,0 +1,83 @@
+<div id="pets-index">
+    <div class="row-fluid pets-index-header">
+        <div class="span6">
+            <legend style="margin-bottom:0;border-bottom:none;">Local Lost Pets</legend>
+        </div>
+        <div class="span6 text-right " style="line-height:40px">
+            <span class="range">
+                <input type="text" id="range" value="<%= params[:range].nil? ? 25 : params[:range] %>" placeholder="" style="margin-bottom:0; width:25px" />
+                miles from
+            </span>
+            <span class="current-location">
+                <a href="#">
+                    <% if !@search_location.first.nil? %>
+                    <%= @search_location.first.city %>, <%= @search_location.first.state_code %>
+                    <% else %>
+                    Unknown Location
+                    <% end %>
+                </a>
+                <input type="text" id="search_location" value="" style="display:none;text-align:left" />
+            </span>
+            <span class="submit">
+                <button class='btn btn-primary' id="range_location_submit">Go</button>
+            </span>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <% if !@pets.empty? %>
+                <div class="petslist clearfix">
+                    <% @pets.each do |pet| %>
+                      <div class="pull-left pet" data-pet-id="<%=pet.id%>">
+                        <img src="<%= pet.picture.presence || 'http://placehold.it/438x327' %>" width="250" height="250" />
+                        <div class="footer">
+                            <div class="row-fluid">
+                                <div class="span10">
+                                    <p class="breed"><%= pet.breed %></p>
+                                    <p class="color"><%= pet.color %></p>
+                                </div>
+                                <div class="span2">
+                                    <span class="status text-<%= (pet.status == "Resolved" ? "success" : "warning")%>">
+                                        <%= pet.status %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    <% end %>
+                </div>
+            <% else %>
+                <h4 class="text-info text-center">No pets have been reported in your area!</h4>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".pet").on('click', function(evt){
+        var pet_id = $(this).data('petId');
+
+        top.location.href = '/pets/' + pet_id;
+    });
+
+    $(".current-location a").on('click', function(evt){
+        $(this).toggle()
+        $(this).parent().find("input").val($(this).text().trim());
+        $(this).parent().find("input").toggle();
+    });
+
+    $(".pets-index-header input").keyup( function( event )
+    {
+        if(event.keyCode == 13)
+        {
+            $( "#range_location_submit" ).click( "form" );
+        }
+    });
+
+    $("#range_location_submit").on('click', function(evt){
+        var range = $("#range").val(),
+            location = $("#search_location").val().trim();
+
+        top.location.href = '/pets?range=' + range + (location == "" ? "" : "&location=" + encodeURIComponent(location));
+    });
+</script>
