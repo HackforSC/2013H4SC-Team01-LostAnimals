@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.builder.IonFormMultipartBodyRequestBuilder;
+import com.r0adkll.deadskunk.utils.DialogFactory;
 import com.r0adkll.deadskunk.utils.Utils;
 import com.r0adkll.lostanimals.R;
 import com.r0adkll.lostanimals.server.APIClient;
@@ -52,8 +53,9 @@ public class ReportFragment extends Fragment implements LocationListener{
      * Static Initializer
      */
 
-    public static ReportFragment createInstance(){
+    public static ReportFragment createInstance(boolean hasLost){
         ReportFragment frag = new ReportFragment();
+        frag.setHasLost(hasLost);
         return frag;
     }
 
@@ -71,6 +73,7 @@ public class ReportFragment extends Fragment implements LocationListener{
     private EditText breed, color, size, name, desc;
     private String thumbnailPath = "";
     private double lat, lng;
+    private boolean hazLost;
 
     public ReportFragment(){}
 
@@ -128,6 +131,9 @@ public class ReportFragment extends Fragment implements LocationListener{
             }
         });
 
+        // Switch switch
+        reportTypeSwitch.setChecked(!hazLost);
+
         // Request User Coordinates
         locMan.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.getMainLooper());
         locMan.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.getMainLooper());
@@ -176,7 +182,21 @@ public class ReportFragment extends Fragment implements LocationListener{
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case android.R.id.home:
-                getFragmentManager().popBackStack();
+
+                // kill GPS listeners
+                locMan.removeUpdates(this);
+
+                // Attempt to find last DetailViewFragment
+                DetailViewFragment dvh = (DetailViewFragment) getFragmentManager().findFragmentByTag("DETAILS");
+                if(dvh != null){
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, dvh, "DETAILS")
+                            .commit();
+
+                }else{
+                    getFragmentManager().popBackStack();
+                }
+
                 return true;
             case R.id.menu_send:
                 // Pull data from all form fields
@@ -212,7 +232,7 @@ public class ReportFragment extends Fragment implements LocationListener{
                 String _breed = breed.getText().toString();
                 String _color = color.getText().toString();
                 String _size = size.getText().toString();
-                String _name = size.getText().toString();
+                String _name = name.getText().toString();
                 String _desc = desc.getText().toString();
                 String _lat = String.valueOf(lat);
                 String _long = String.valueOf(lng);
@@ -250,17 +270,28 @@ public class ReportFragment extends Fragment implements LocationListener{
                                         // Create PET object and open detail view
                                         Pet pet = new Pet(result);
 
+                                        // Creaet and show detail pane
+                                        DetailViewFragment dvf = DetailViewFragment.createInstance(pet);
+                                        getFragmentManager().beginTransaction()
+                                                .replace(R.id.fragment_container, dvf, "DETAILS")
+                                                .addToBackStack("DETAILS_INNER")
+                                                .commit();
+
                                     } catch (JSONException e1) {
                                         e1.printStackTrace();
+                                        getFragmentManager().popBackStack();
                                     }
                                 }else{
                                     String msg = (e == null) ? "Error!" : e.getLocalizedMessage();
                                     Utils.log(TAG, "Report animal failed: " + msg);
+                                    DialogFactory.createAlertDialog(getActivity(), msg, "Report a Pet");
                                 }
                            }
                        });
 
 
+                }else{
+                    DialogFactory.createAlertDialog(getActivity(), "You mush enter content for Color, Size, and Description", "Report a Pet");
                 }
 
                 return true;
@@ -317,7 +348,9 @@ public class ReportFragment extends Fragment implements LocationListener{
         return (EditText) findView(id);
     }
 
-
+    public void setHasLost(boolean val){
+        hazLost = val;
+    }
 
 
 

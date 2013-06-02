@@ -2,6 +2,12 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+            android:id="@+id/menu_report"
+            android:title="Report Pet"
+            android:showAsAction="ifRoom"
+            android:icon="@drawable/ic_action_alert_dark"/>
+
+    <item
         android:id="@+id/menu_refresh"
         android:title="Refresh"
         android:showAsAction="ifRoom"

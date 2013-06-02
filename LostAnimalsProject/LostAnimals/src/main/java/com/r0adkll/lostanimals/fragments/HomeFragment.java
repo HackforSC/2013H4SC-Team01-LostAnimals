@@ -153,6 +153,17 @@ public class HomeFragment extends Fragment implements LocationListener, UserSess
                 loading.setVisibility(View.VISIBLE);
                 noPetsMsg.setVisibility(View.GONE);
                 return true;
+            case R.id.menu_report:
+
+                // Show Report
+                ReportFragment report = ReportFragment.createInstance(true);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, report, "REPORT")
+                        .addToBackStack("REPORT")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+
+                return true;
         }
 
         return false;

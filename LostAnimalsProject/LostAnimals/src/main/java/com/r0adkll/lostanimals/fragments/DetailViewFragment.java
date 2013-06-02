@@ -112,8 +112,7 @@ public class DetailViewFragment extends Fragment {
             case R.id.menu_report:
 
                 // Show report Fragment
-                ReportFragment report = ReportFragment.createInstance();
-
+                ReportFragment report = ReportFragment.createInstance(false);
                 getFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, report, "REPORT")
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
