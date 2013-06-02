@@ -1,6 +1,7 @@
 package com.r0adkll.lostanimals.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -110,7 +111,13 @@ public class DetailViewFragment extends Fragment {
                 return true;
             case R.id.menu_report:
 
+                // Show report Fragment
+                ReportFragment report = ReportFragment.createInstance();
 
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, report, "REPORT")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
 
                 return true;
         }
@@ -167,7 +174,7 @@ public class DetailViewFragment extends Fragment {
 
         // Use ION to load image
         Ion.with(banner)
-           .placeholder(R.drawable.ic_launcher)
+           .placeholder(R.drawable.ic_placeholder)
            .error(R.drawable.ic_cat)
            .load(data.picture);
 
@@ -178,6 +185,12 @@ public class DetailViewFragment extends Fragment {
         size.setText(boldFeature("Size: ", data.size));
         status.setText(data.status);
         description.setText(data.description);
+
+        if(data.status.equalsIgnoreCase("lost")){
+            status.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+        }else{
+            status.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+        }
 
         // Format dates// Set the time
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");

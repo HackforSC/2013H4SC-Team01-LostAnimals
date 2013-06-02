@@ -27,7 +27,12 @@ import com.r0adkll.lostanimals.server.UserSession;
 import com.r0adkll.lostanimals.server.model.Pet;
 import com.r0adkll.lostanimals.utils.ComCenter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,6 +51,8 @@ public class HomeFragment extends Fragment implements LocationListener, UserSess
         return home;
     }
 
+
+    private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
 
     /*****************************************************
      * Variables
@@ -230,6 +237,21 @@ public class HomeFragment extends Fragment implements LocationListener, UserSess
                 // Update pet data
                 petData.clear();
                 petData.addAll(pets);
+
+                // Sort data by date
+                Collections.sort(petData, new Comparator<Pet>() {
+                    @Override
+                    public int compare(Pet pet, Pet pet2) {
+                        try {
+                            Date d1 = format.parse(pet.updated_at);
+                            Date d2 = format.parse(pet2.updated_at);
+                            return d1.compareTo(d2);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return 0;
+                    }
+                });
 
                 // Call change to the adapter
                 adapter = new PetListAdapter(getActivity().getApplicationContext(), listener, R.layout.layout_home_item, petData);

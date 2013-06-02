@@ -28,9 +28,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:layout_centerInParent="true"
 
         android:text="@string/no_pets"
-        android:textSize="28dp"
+        android:textSize="18dp"
         android:visibility="gone"
         />
 

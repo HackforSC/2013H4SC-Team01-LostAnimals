@@ -56,7 +56,8 @@ public class PetListAdapter extends GPlusListAdapter {
         holder.petIcon = (ImageView) view.findViewById(R.id.pet_icon);
         holder.bannerImage = (ImageView) view.findViewById(R.id.banner_image);
         holder.date = (TextView) view.findViewById(R.id.tv_date);
-        holder.description = (TextView) view.findViewById(R.id.description);
+        holder.breed = (TextView) view.findViewById(R.id.description_1);
+        holder.color = (TextView) view.findViewById(R.id.description_2);
         holder.info = (ImageView) view.findViewById(R.id.btn_more_info);
         return holder;
     }
@@ -78,18 +79,19 @@ public class PetListAdapter extends GPlusListAdapter {
 
         // Use ION to load and cache the banner image
         Ion.with(holder.bannerImage)
-           .placeholder(R.drawable.ic_action_person_light)
+           .placeholder(R.drawable.ic_placeholder)
            .error(R.drawable.ic_action_about_light)
            .load(data.picture);
 
         // Set teh Description
-        holder.description.setText(data.breed + " | " + data.color);
+        holder.breed.setText(data.breed);
+        holder.color.setText(data.color);
 
         // Set the time
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-        SimpleDateFormat outFormat = new SimpleDateFormat("MM/dd/yy");
+        SimpleDateFormat outFormat = new SimpleDateFormat("MMM dd, yyyy");
         try {
-            Date time = format.parse(data.created_at);
+            Date time = format.parse(data.updated_at);
             String date = outFormat.format(time);
             holder.date.setText(date);
         } catch (ParseException e) {
@@ -122,7 +124,7 @@ public class PetListAdapter extends GPlusListAdapter {
         ImageView petIcon;
         ImageView bannerImage;
         TextView date;
-        TextView description;
+        TextView breed, color;
         ImageView info;
     }
 
