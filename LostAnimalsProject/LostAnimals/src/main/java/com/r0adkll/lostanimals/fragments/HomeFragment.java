@@ -1,6 +1,7 @@
 package com.r0adkll.lostanimals.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import com.r0adkll.lostanimals.R;
 import com.r0adkll.lostanimals.adapter.PetListAdapter;
 import com.r0adkll.lostanimals.server.UserSession;
 import com.r0adkll.lostanimals.server.model.Pet;
+import com.r0adkll.lostanimals.utils.ComCenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +34,7 @@ import java.util.List;
 /**
  * Created by r0adkll on 6/1/13.
  */
-public class HomeFragment extends Fragment implements LocationListener{
+public class HomeFragment extends Fragment implements LocationListener, UserSession.PetChangeObserver{
     private static final String TAG = "TAG";
 
     /*****************************************************
@@ -73,7 +76,7 @@ public class HomeFragment extends Fragment implements LocationListener{
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
 
     }
 
@@ -88,7 +91,6 @@ public class HomeFragment extends Fragment implements LocationListener{
         petList = (ListView)getActivity().findViewById(R.id.home_list);
         noPetsMsg = (TextView)getActivity().findViewById(R.id.no_pets_message);
         loading = (ProgressBar)getActivity().findViewById(R.id.pb_loading);
-
         petList.setOnScrollListener(listener);
 
         // Init data array
@@ -97,6 +99,25 @@ public class HomeFragment extends Fragment implements LocationListener{
         // Create Adapter and bind to list view
         adapter = new PetListAdapter(getActivity().getApplicationContext(), listener, R.layout.layout_home_item, petData);
         petList.setAdapter(adapter);
+        petList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Pet pet = (Pet)petList.getItemAtPosition(i);
+
+                // Create and show Detail View Fragment
+                DetailViewFragment details = DetailViewFragment.createInstance(pet);
+
+                // Show
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, details, "DETAILS")
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack("DETAILS")
+                        .commit();
+
+            }
+        });
+
+
 
         // Make location request
         locMan.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.getMainLooper());
@@ -109,11 +130,23 @@ public class HomeFragment extends Fragment implements LocationListener{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-
+        inflater.inflate(R.menu.fragment_home, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_refresh:
+                // Refresh the list
+                // Make location request
+                locMan.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.getMainLooper());
+
+                // hide listview, and show loading view
+                petList.setVisibility(View.GONE);
+                loading.setVisibility(View.VISIBLE);
+                noPetsMsg.setVisibility(View.GONE);
+                return true;
+        }
 
         return false;
     }
@@ -126,15 +159,31 @@ public class HomeFragment extends Fragment implements LocationListener{
     @Override
     public void onResume() {
         super.onResume();
+
+        // Disable home as up
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+
+        // Register for Pet Changes
+        UserSession.getSession(getActivity()).registerPetChangeObserver(this);
     }
 
     @Override
     public void onPause() {
+        // Unregister pet change observer
+        UserSession.getSession(getActivity()).unregisterPetChangeObserver(this);
         super.onPause();
     }
 
     @Override
+    public void onStop() {
+        // Unregister pet change observer
+        UserSession.getSession(getActivity()).unregisterPetChangeObserver(this);
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
+
         super.onDestroy();
     }
 
@@ -162,13 +211,14 @@ public class HomeFragment extends Fragment implements LocationListener{
         params.put("range", RANGE);
 
         // Load Pet Data
-        UserSession.getSession().loadPetData(getActivity(), params, new UserSession.OnPetDataLoad() {
+        UserSession.getSession(getActivity()).loadPetData(getActivity(), params, new UserSession.OnPetDataLoad() {
             @Override
             public void onSuccess(List<Pet> pets) {
                 Utils.log(TAG, "Loaded Pet Data: " + pets.size());
 
                 // Hide the loading bar
                 loading.setVisibility(View.GONE);
+                petList.setVisibility(View.VISIBLE);
 
                 // if the results are empty, show empty message
                 if(pets.isEmpty()){
@@ -216,6 +266,19 @@ public class HomeFragment extends Fragment implements LocationListener{
 
     @Override
     public void onProviderDisabled(String s) {
+
+    }
+
+
+    /**
+     * Pet Changes! Spawn notification
+     */
+    @Override
+    public void onPetsChange(List<Pet> pets) {
+
+        // Create Notification
+        ComCenter.getInstance(getActivity())
+                .createPetUpdateNotification(pets, "Pet Status Update", pets.size() + " pets updated.");
 
     }
 

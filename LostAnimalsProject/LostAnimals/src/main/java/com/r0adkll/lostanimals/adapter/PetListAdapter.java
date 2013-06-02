@@ -87,8 +87,7 @@ public class PetListAdapter extends GPlusListAdapter {
 
         // Set the time
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-
-        SimpleDateFormat outFormat = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat outFormat = new SimpleDateFormat("MM/dd/yy");
         try {
             Date time = format.parse(data.created_at);
             String date = outFormat.format(time);

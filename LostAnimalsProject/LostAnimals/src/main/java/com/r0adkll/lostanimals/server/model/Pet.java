@@ -2,10 +2,13 @@ package com.r0adkll.lostanimals.server.model;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by r0adkll on 6/1/13.
  */
-public class Pet {
+public class Pet implements Serializable{
+
 
     /**
      * Variables

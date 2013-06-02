@@ -33,7 +33,9 @@
         android:layout_margin="8dp"
 
         android:text="5/23/13"
-        android:textColor="@color/smokedWhite"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         />
 
     <RelativeLayout
@@ -66,7 +68,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_action_about_light"
+            android:src="@drawable/ic_action_about_dark"
             />
 
 
