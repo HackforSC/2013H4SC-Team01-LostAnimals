@@ -1,7 +1,6 @@
 package com.r0adkll.lostanimals.utils;
 
-import org.holoeverywhere.widget.SeekBar;
-import org.holoeverywhere.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.SeekBar;
 
 
 /**
@@ -11,8 +10,13 @@ import org.holoeverywhere.widget.SeekBar.OnSeekBarChangeListener;
  * @author drew.heavner
  *
  */
-public class SmoothSeekBarChangeListener implements OnSeekBarChangeListener {
+public class SmoothSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
 	private int smoothnessFactor = 10;
+
+    public SmoothSeekBarChangeListener(){}
+    public SmoothSeekBarChangeListener(int smoothFactor){
+        smoothnessFactor = smoothFactor;
+    }
 	
 	/**
 	 * Unused
