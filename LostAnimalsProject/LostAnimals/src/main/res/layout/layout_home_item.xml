@@ -3,8 +3,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:background="@android:color/white"
         >
+
+
+    <ImageView
+            android:id="@+id/banner_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+
+            android:scaleType="centerCrop"
+            />
 
 
     <ImageView
@@ -13,16 +22,18 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
 
-        android:src="@drawable/ic_action_person_light"
+        android:src="@drawable/ic_cat"
         />
 
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
 
-    <ImageView
-        android:id="@+id/banner_image"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-
-        android:background="@drawable/ic_action_person_light"
+        android:text="5/23/13"
+        android:textColor="@color/smokedWhite"
         />
 
     <RelativeLayout
@@ -31,11 +42,11 @@
         android:layout_height="48dp"
         android:layout_alignBottom="@+id/banner_image"
 
-        android:background="@color/white30"
+        android:background="@color/grey30"
         >
 
         <TextView
-            android:id="description"
+            android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -43,16 +54,19 @@
 
             android:textSize="20sp"
             android:text="Mix Lab | Tan/White"
+            android:textColor="@color/smokedWhite"
 
             />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_more_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
+            android:src="@drawable/ic_action_about_light"
             />
 
 

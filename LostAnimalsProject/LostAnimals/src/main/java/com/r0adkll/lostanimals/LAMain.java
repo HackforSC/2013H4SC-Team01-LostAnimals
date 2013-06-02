@@ -3,8 +3,10 @@ package com.r0adkll.lostanimals;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 
+import com.koushikdutta.ion.Ion;
 import com.r0adkll.lostanimals.fragments.HomeFragment;
 
 public class LAMain extends Activity {
@@ -23,6 +25,9 @@ public class LAMain extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Set loggin on ION
+        Ion.getDefault(this).setLogging("ION-LA", Log.DEBUG);
 
 
         // Load the Home Fragment

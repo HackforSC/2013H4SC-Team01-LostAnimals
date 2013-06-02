@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="white30">#DDFFFFFF</color>
+    <color name="smokedWhite">#DDFFFFFF</color>
+    <color name="white30">#AAFFFFFF</color>
+    <color name="grey30">#DD808080</color>
+    <color name="grey80">#CCCCCC</color>
+    <color name="darkGrey">#1A1A1A</color>
 
 </resources>

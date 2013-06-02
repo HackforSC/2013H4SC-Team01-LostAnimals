@@ -7,5 +7,6 @@
     </string>
     <string name="hello_world" >Hello world!
     </string>
+    <string name="no_pets">Sorry, but no missing pets where found in your area. Please try again later.</string>
 
 </resources>
