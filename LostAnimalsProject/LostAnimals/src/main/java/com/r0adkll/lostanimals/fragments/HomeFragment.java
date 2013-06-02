@@ -127,7 +127,10 @@ public class HomeFragment extends Fragment implements LocationListener, UserSess
 
 
         // Make location request
-        locMan.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.getMainLooper());
+        if(!Utils.isTabletDevice(getActivity()))
+            locMan.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.getMainLooper());
+        else
+            onLocationChanged(null);
     }
 
     @Override
@@ -214,18 +217,25 @@ public class HomeFragment extends Fragment implements LocationListener, UserSess
 
     @Override
     public void onLocationChanged(Location location) {
-        Utils.log(getTag(), "onLocationChanged(" + location.getLatitude() + ", " + location.getLongitude() + ", " + location.getAccuracy());
+        if(location != null)
+            Utils.log(getTag(), "onLocationChanged(" + location.getLatitude() + ", " + location.getLongitude() + ", " + location.getAccuracy());
 
         final String RANGE = "50";
 
+        double lat = 0.0;
+        double lng = 0.0;
         // GPS Coord parameter variables
-        final double lat = location.getLatitude();
-        final double lng = location.getLongitude();
+        if(location != null){
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+        }
 
         // Encode Parameters
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("lat", String.valueOf(lat));
-        params.put("long", String.valueOf(lng));
+        if(lat != 0.0 && lng != 0.0){
+            params.put("lat", String.valueOf(lat));
+            params.put("long", String.valueOf(lng));
+        }
         params.put("range", RANGE);
 
         // Load Pet Data
