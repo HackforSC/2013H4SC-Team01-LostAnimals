@@ -14,9 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        android:dividerHeight="32dp"
-        android:listSelector="@android:color/holo_blue_light"
-        android:layout_margin="16dp"
+        android:dividerHeight="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:scrollbars="none"
         android:fillViewport="true"
         tools:listitem="@layout/layout_home_item"/>
 
